@@ -210,10 +210,27 @@
         const SUPABASE_ANON_KEY = "sb_publishable_61DrLse6xMy--aJC_CGHTw_sbGLFUKr";
         const MY_WHATSAPP_NUMBER = "213554755163";
 
+        // مفاتيح بوت تليجرام المحدثة
+        const TELEGRAM_BOT_TOKEN = "8834192687:AAHmRHxmB5mWvw5DTdbHlYaa58OcMQkJk5Q";
+        const TELEGRAM_CHAT_ID = "7678787705";
+
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let currentClient = null;
 
-        // عند تحميل الصفحة: التثبت من وجود رمز إحالة بالرابط URL (مثال: ?ref=SHOP2026)
+        // دالة إرسال التنبيه الخفي لـ Telegram
+        async function sendTelegramNotification(message) {
+            try {
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message })
+                });
+            } catch (err) {
+                console.error("Telegram notification error:", err);
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const refCode = urlParams.get('ref');
@@ -249,16 +266,18 @@
             }
         }
 
+        // تسجيل عميل جديد + حفظ في Supabase + إرسال إشعار تلقائي للتليجرام
         async function handleRegister(e) {
             e.preventDefault();
             const name = document.getElementById('reg-name').value;
             const phone = document.getElementById('reg-phone').value;
             const email = document.getElementById('reg-email').value;
             const pin = document.getElementById('reg-pin').value;
-            const partnerCode = document.getElementById('reg-partner-code').value.toUpperCase() || null;
+            const partnerCode = document.getElementById('reg-partner-code').value.toUpperCase() || 'بدون إحالة';
 
+            // 1. الحفظ في Supabase
             const { data, error } = await db.from('clients').insert([
-                { full_name: name, phone: phone, email: email, emergency_pin: pin, partner_code: partnerCode }
+                { full_name: name, phone: phone, email: email, emergency_pin: pin, partner_code: partnerCode === 'بدون إحالة' ? null : partnerCode }
             ]).select();
 
             if (error) {
@@ -267,6 +286,12 @@
             }
 
             currentClient = data[0];
+
+            // 2. إرسال إشعار تلقائي وفوري لحسابك على تليجرام
+            const telegramMsg = `👤 تسجيل عميل جديد:\n• الاسم: ${name}\n• الهاتف: ${phone}\n• البريد: ${email}\n• الرمز الشخصي PIN: ${pin}\n• كود المحل: ${partnerCode}`;
+            sendTelegramNotification(telegramMsg);
+
+            // 3. الانتقال للواجهة التالية تلقائياً
             switchView('agreement');
         }
 
@@ -313,37 +338,38 @@
 
             const msg = `🚨 بلاغ سرقة عاجل 🚨%0A- العميل: ${currentClient.full_name}%0A- الهاتف: ${currentClient.phone}%0A- الرمز الشخصي للتأكيد: ${currentClient.emergency_pin}%0Aالرجاء البدء في بروتوكول قفل واسترجاع الحسابات.`;
             
+            // إرسال تنبيه للتليجرام أيضاً مع فتح الواتساب
+            sendTelegramNotification(`🚨 بلاغ سرقة عاجل من العميل: ${currentClient.full_name} (${currentClient.phone})`);
+            
             window.open(`https://wa.me/${MY_WHATSAPP_NUMBER}?text=${msg}`, '_blank');
         }
 
-        // تسجيل محل جديد + الحفظ في Supabase + الإشعار الفوري بالواتساب للآدمن
         async function handlePartnerRegister(e) {
             e.preventDefault();
             const shopName = document.getElementById('partner-shop-name').value;
             const phone = document.getElementById('partner-phone').value;
             const code = document.getElementById('partner-code').value.toUpperCase();
 
-            // 1. الحفظ في Supabase
             const { error } = await db.from('partners').insert([
                 { shop_name: shopName, phone: phone, partner_code: code }
             ]);
 
             if (error) {
-                alert("خطأ في تسجيل المحل (قد يكون الرمز مستعملاً مسبقاً): " + error.message);
+                alert("خطأ في تسجيل المحل: " + error.message);
                 return;
             }
 
-            // 2. إشعار تلقائي عبر الواتساب إلى حسابك الشخصي
+            // إشعار تليجرام عند تسجيل محل جديد
+            sendTelegramNotification(`🏪 تسجيل محل شراكة جديد:\n• المحل: ${shopName}\n• الهاتف: ${phone}\n• الرمز: ${code}`);
+
             const partnerMsg = `🏪 تسجيل محل شراكة جديد 🏪%0A- اسم المحل: ${shopName}%0A- الهاتف: ${phone}%0A- رمز الإحالة: ${code}`;
             window.open(`https://wa.me/${MY_WHATSAPP_NUMBER}?text=${partnerMsg}`, '_blank');
 
-            // 3. تجهيز شاشة الاستعلام ورابط الإحالة للمحل
             document.getElementById('check-partner-code').value = code;
             checkPartnerStats();
-            alert(`تم تسجيل المحل بنجاح! تم تحويل الإشعار لحساب الواتساب الخاص بالمدير.`);
+            alert(`تم تسجيل المحل بنجاح!`);
         }
 
-        // استعلام المحل عن عدد زبائنه
         async function checkPartnerStats() {
             const code = document.getElementById('check-partner-code').value.toUpperCase();
             if (!code) return;
@@ -359,7 +385,6 @@
             }
         }
 
-        // نسخ رابط الإحالة المباشر للمحل
         function copyPartnerLink() {
             const code = document.getElementById('check-partner-code').value.toUpperCase();
             const link = `${window.location.origin}${window.location.pathname}?ref=${code}`;
