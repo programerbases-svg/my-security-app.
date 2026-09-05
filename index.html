@@ -79,7 +79,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">رمز إحالة المحل (اختياري)</label>
-                        <input type="text" id="reg-partner-code" placeholder="رمز المحل إن وجد" class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-slate-50">
+                        <input type="text" id="reg-partner-code" placeholder="رمز المحل إن وجد" class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-slate-50 uppercase">
                     </div>
                     <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-md text-sm">
                         حفظ البيانات والانتقال للشروط
@@ -152,11 +152,13 @@
         </section>
 
         <!-- VIEW 5: PARTNER / SHOP PORTAL -->
-        <section id="view-partner" class="max-w-md mx-auto bg-white border rounded-xl shadow-md p-6 space-y-4 hidden">
+        <section id="view-partner" class="max-w-md mx-auto bg-white border rounded-xl shadow-md p-6 space-y-6 hidden">
             <div class="border-b pb-3 text-center">
                 <h2 class="font-bold text-slate-900 text-lg">بوابة أصحاب المحلات والشراكة</h2>
-                <p class="text-xs text-slate-500">تسجيل محل جديد وتوليد رمز الإحالة</p>
+                <p class="text-xs text-slate-500">تسجيل محل جديد، توليد رابط الإحالة، ومتابعة الاحصائيات</p>
             </div>
+
+            <!-- FORM: REGISTER SHOP -->
             <form onsubmit="handlePartnerRegister(event)" class="space-y-3">
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">اسم المحل التجاري</label>
@@ -171,9 +173,26 @@
                     <input type="text" id="partner-code" required placeholder="SHOP2026" class="w-full text-sm px-3 py-2 border rounded-md outline-none uppercase font-bold">
                 </div>
                 <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-md text-sm">
-                    تسجيل المحل وتوليد رابط الإحالة
+                    تسجيل المحل وإرسال الإشعار
                 </button>
             </form>
+
+            <!-- STATS & REFERRAL LINK CHECK -->
+            <div class="border-t pt-4 space-y-3">
+                <h3 class="font-bold text-xs text-slate-800">متابعة إحصائيات المحل:</h3>
+                <div class="flex gap-2">
+                    <input type="text" id="check-partner-code" placeholder="أدخل رمز المحل" class="flex-1 text-sm px-3 py-1.5 border rounded-md outline-none uppercase">
+                    <button onclick="checkPartnerStats()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-md">
+                        استعلام
+                    </button>
+                </div>
+                <div id="partner-stats-result" class="hidden bg-slate-50 border p-3 rounded-md text-xs space-y-2">
+                    <p class="text-slate-700">عدد الزبائن المسجلين عبر رمزك: <span id="partner-count" class="font-bold text-emerald-600">0</span></p>
+                    <button onclick="copyPartnerLink()" class="w-full bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold py-1.5 rounded border border-emerald-300">
+                        <i class="fa-solid fa-copy"></i> نسخ رابط الإحالة المباشر
+                    </button>
+                </div>
+            </div>
         </section>
 
     </main>
@@ -187,16 +206,26 @@
 
     <!-- SCRIPT LOGIC -->
     <script>
-        // إعداد بيانات الاتصال الخاصة بك
         const SUPABASE_URL = "https://uephhkjfarwvmeaygzad.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_61DrLse6xMy--aJC_CGHTw_sbGLFUKr";
         const MY_WHATSAPP_NUMBER = "213554755163";
 
-        // الاتصال بـ Supabase
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let currentClient = null;
 
-        // إدارة الواجهات
+        // عند تحميل الصفحة: التثبت من وجود رمز إحالة بالرابط URL (مثال: ?ref=SHOP2026)
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            if (refCode) {
+                const partnerInput = document.getElementById('reg-partner-code');
+                partnerInput.value = refCode.toUpperCase();
+                partnerInput.readOnly = true;
+                partnerInput.classList.add('bg-emerald-50', 'text-emerald-800', 'font-bold');
+                toggleAuthTab('register');
+            }
+        });
+
         function switchView(viewName) {
             ['auth', 'pin-verification', 'agreement', 'dashboard', 'partner'].forEach(v => {
                 document.getElementById(`view-${v}`).classList.add('hidden');
@@ -220,14 +249,13 @@
             }
         }
 
-        // تسجيل حساب جديد وحفظه
         async function handleRegister(e) {
             e.preventDefault();
             const name = document.getElementById('reg-name').value;
             const phone = document.getElementById('reg-phone').value;
             const email = document.getElementById('reg-email').value;
             const pin = document.getElementById('reg-pin').value;
-            const partnerCode = document.getElementById('reg-partner-code').value || null;
+            const partnerCode = document.getElementById('reg-partner-code').value.toUpperCase() || null;
 
             const { data, error } = await db.from('clients').insert([
                 { full_name: name, phone: phone, email: email, emergency_pin: pin, partner_code: partnerCode }
@@ -242,7 +270,6 @@
             switchView('agreement');
         }
 
-        // تسجيل الدخول والتحقق من PIN
         async function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
@@ -277,7 +304,6 @@
             switchView('dashboard');
         }
 
-        // تقديم بلاغ طوارئ وتسجيله سحابياً + تحويل للواتساب
         async function sendEmergencyIncident() {
             if (!currentClient) return;
 
@@ -290,23 +316,56 @@
             window.open(`https://wa.me/${MY_WHATSAPP_NUMBER}?text=${msg}`, '_blank');
         }
 
-        // تسجيل محل جديد
+        // تسجيل محل جديد + الحفظ في Supabase + الإشعار الفوري بالواتساب للآدمن
         async function handlePartnerRegister(e) {
             e.preventDefault();
             const shopName = document.getElementById('partner-shop-name').value;
             const phone = document.getElementById('partner-phone').value;
             const code = document.getElementById('partner-code').value.toUpperCase();
 
+            // 1. الحفظ في Supabase
             const { error } = await db.from('partners').insert([
                 { shop_name: shopName, phone: phone, partner_code: code }
             ]);
 
             if (error) {
-                alert("خطأ في تسجيل المحل: " + error.message);
-            } else {
-                alert(`تم تسجيل المحل بنجاح! رمز الإحالة الخاص بك هو: ${code}`);
-                switchView('auth');
+                alert("خطأ في تسجيل المحل (قد يكون الرمز مستعملاً مسبقاً): " + error.message);
+                return;
             }
+
+            // 2. إشعار تلقائي عبر الواتساب إلى حسابك الشخصي
+            const partnerMsg = `🏪 تسجيل محل شراكة جديد 🏪%0A- اسم المحل: ${shopName}%0A- الهاتف: ${phone}%0A- رمز الإحالة: ${code}`;
+            window.open(`https://wa.me/${MY_WHATSAPP_NUMBER}?text=${partnerMsg}`, '_blank');
+
+            // 3. تجهيز شاشة الاستعلام ورابط الإحالة للمحل
+            document.getElementById('check-partner-code').value = code;
+            checkPartnerStats();
+            alert(`تم تسجيل المحل بنجاح! تم تحويل الإشعار لحساب الواتساب الخاص بالمدير.`);
+        }
+
+        // استعلام المحل عن عدد زبائنه
+        async function checkPartnerStats() {
+            const code = document.getElementById('check-partner-code').value.toUpperCase();
+            if (!code) return;
+
+            const { count, error } = await db
+                .from('clients')
+                .select('*', { count: 'exact', head: true })
+                .eq('partner_code', code);
+
+            if (!error) {
+                document.getElementById('partner-count').textContent = count || 0;
+                document.getElementById('partner-stats-result').classList.remove('hidden');
+            }
+        }
+
+        // نسخ رابط الإحالة المباشر للمحل
+        function copyPartnerLink() {
+            const code = document.getElementById('check-partner-code').value.toUpperCase();
+            const link = `${window.location.origin}${window.location.pathname}?ref=${code}`;
+            navigator.clipboard.writeText(link).then(() => {
+                alert("تم نسخ رابط الإحالة المباشر للمحل:\n" + link);
+            });
         }
     </script>
 </body>
