@@ -23,15 +23,18 @@
                 <i class="fa-solid fa-shield-halved text-emerald-500 text-2xl md:text-3xl"></i>
                 <div>
                     <h1 class="font-bold text-sm md:text-lg leading-tight">المنصة الرقمية للاستجابة وتأمين الحسابات</h1>
-                    <p class="text-xs text-slate-400">نظام حماية وقائي موثوق وتأمين عن بعد </p>
+                    <p class="text-xs text-slate-400">نظام حماية وقائي موثوق وتأمين عن بعد</p>
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="switchView('auth')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs px-3 py-2 rounded border border-slate-700">
-                    <i class="fa-solid fa-user"></i> دخول / تسجيل
+                <button onclick="switchView('auth')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs px-3 py-2 rounded border border-slate-700 transition-colors">
+                    <i class="fa-solid fa-user"></i> دخول / تسجيل زبون
                 </button>
-                <button onclick="switchView('partner')" class="bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-xs px-3 py-2 rounded">
+                <button onclick="switchView('partner')" class="bg-emerald-800 hover:bg-emerald-700 text-white font-semibold text-xs px-3 py-2 rounded transition-colors">
                     <i class="fa-solid fa-store"></i> بوابة المحلات
+                </button>
+                <button onclick="switchView('admin-login')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold text-xs px-3 py-2 rounded transition-colors">
+                    <i class="fa-solid fa-user-gear"></i> الإدارة
                 </button>
             </div>
         </div>
@@ -40,48 +43,84 @@
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
 
-        <!-- VIEW 1: AUTHENTICATION (LOGIN / REGISTER) -->
-        <section id="view-auth" class="max-w-md mx-auto bg-white border rounded-xl shadow-sm overflow-hidden">
+        <!-- VIEW 1: AUTHENTICATION (CLIENT LOGIN / REGISTER) -->
+        <section id="view-auth" class="max-w-lg mx-auto bg-white border rounded-xl shadow-sm overflow-hidden">
             <div class="flex border-b bg-slate-50">
                 <button id="tab-login-btn" onclick="toggleAuthTab('login')" class="flex-1 py-3 font-bold text-sm text-emerald-700 border-b-2 border-emerald-600 bg-white">تسجيل الدخول</button>
                 <button id="tab-register-btn" onclick="toggleAuthTab('register')" class="flex-1 py-3 font-bold text-sm text-slate-500 border-b-2 border-transparent">إنشاء حساب جديد</button>
             </div>
 
             <div class="p-6">
-                <!-- FORM: LOGIN -->
+                <!-- FORM: CLIENT LOGIN -->
                 <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">البريد الإلكتروني</label>
                         <input type="email" id="login-email" required placeholder="example@mail.com" class="w-full text-sm px-3 py-2 border rounded-md focus:ring-2 focus:ring-slate-800 outline-none">
                     </div>
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-md text-sm">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">كلمة السر</label>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full text-sm px-3 py-2 border rounded-md focus:ring-2 focus:ring-slate-800 outline-none">
+                    </div>
+                    <button type="submit" id="btn-login" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-md text-sm transition-colors">
                         المتابعة إلى رمز الأمان (PIN)
                     </button>
                 </form>
 
-                <!-- FORM: REGISTER -->
+                <!-- FORM: CLIENT REGISTER -->
                 <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">الاسم الكامل</label>
-                        <input type="text" id="reg-name" required placeholder="الاسم واللقب" class="w-full text-sm px-3 py-2 border rounded-md outline-none">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">الاسم الكامل</label>
+                            <input type="text" id="reg-name" required placeholder="الاسم واللقب" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">رقم الهاتف الرئيسي</label>
+                            <input type="tel" id="reg-phone" required placeholder="05/06/07XXXXXX" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">البريد الإلكتروني</label>
+                            <input type="email" id="reg-email" required placeholder="example@mail.com" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">كلمة السر للحساب</label>
+                            <input type="password" id="reg-password" required placeholder="••••••••" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">الولاية</label>
+                            <select id="reg-state" onchange="updateMunicipalities('reg-state', 'reg-municipality')" required class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-white focus:ring-2 focus:ring-emerald-600">
+                                <option value="">اختر الولاية...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">البلدية</label>
+                            <select id="reg-municipality" required class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-white focus:ring-2 focus:ring-emerald-600">
+                                <option value="">اختر الولاية أولاً...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">نوع الجهاز والتأمين</label>
+                            <select id="reg-device-type" class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-white focus:ring-2 focus:ring-emerald-600">
+                                <option value="Android">هاتف أندرويد (Android)</option>
+                                <option value="iPhone">آيفون (iOS)</option>
+                                <option value="PC/Laptop">كمبيوتر / حاسوب محمول</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">رمز PIN للطوارئ (6 أرقام)</label>
+                            <input type="password" maxlength="6" id="reg-pin" required placeholder="******" class="w-full text-center tracking-widest px-3 py-2 border rounded-md outline-none font-bold focus:ring-2 focus:ring-emerald-600">
+                        </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">رقم الهاتف الرئيسي</label>
-                        <input type="tel" id="reg-phone" required placeholder="05XXXXXXXX" class="w-full text-sm px-3 py-2 border rounded-md outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">رمز إحالة المحل (إن وجد)</label>
+                        <input type="text" id="reg-partner-code" placeholder="SHOP-XXXX" class="w-full text-sm px-3 py-2 border rounded-md outline-none uppercase bg-slate-50 focus:ring-2 focus:ring-emerald-600">
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">البريد الإلكتروني</label>
-                        <input type="email" id="reg-email" required placeholder="example@mail.com" class="w-full text-sm px-3 py-2 border rounded-md outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">الرمز الشخصي للطوارئ (PIN مكون من 6 أرقام)</label>
-                        <input type="password" maxlength="6" id="reg-pin" required placeholder="******" class="w-full text-center text-lg tracking-widest px-3 py-2 border rounded-md outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">رمز إحالة المحل (اختياري)</label>
-                        <input type="text" id="reg-partner-code" placeholder="رمز المحل إن وجد" class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-slate-50 uppercase">
-                    </div>
-                    <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-md text-sm">
+                    <button type="submit" id="btn-register" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-md text-sm transition-colors">
                         حفظ البيانات والانتقال للشروط
                     </button>
                 </form>
@@ -98,9 +137,26 @@
                 <p class="text-xs text-slate-500 mt-1">أدخل رمز الأمان المتفق عليه لدخول اللوحة.</p>
             </div>
             <form onsubmit="handlePinVerify(event)" class="space-y-4">
-                <input type="password" id="input-pin" maxlength="6" required placeholder="••••••" class="w-full text-center tracking-widest text-2xl px-3 py-2 border rounded-lg focus:ring-2 focus:ring-red-700 outline-none">
-                <button type="submit" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-2.5 rounded-md text-sm">
+                <input type="password" id="input-pin" maxlength="6" required placeholder="••••••" class="w-full text-center tracking-widest text-2xl px-3 py-2 border rounded-lg focus:ring-2 focus:ring-red-700 outline-none font-bold">
+                <button type="submit" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-2.5 rounded-md text-sm transition-colors">
                     تأكيد ودخول اللوحة
+                </button>
+            </form>
+        </section>
+
+        <!-- VIEW 2.5: PARTNER CODE VERIFICATION (AFTER PARTNER LOGIN) -->
+        <section id="view-partner-code-verification" class="max-w-md mx-auto bg-white border border-emerald-200 rounded-xl shadow-lg p-6 space-y-5 hidden">
+            <div class="text-center">
+                <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-2 text-emerald-700">
+                    <i class="fa-solid fa-store text-xl"></i>
+                </div>
+                <h2 class="font-bold text-slate-900 text-lg">أدخل رمز الإحالة الخاص بالمحل</h2>
+                <p class="text-xs text-slate-500 mt-1">للتأكيد والدخول إلى لوحة تحكم المحل.</p>
+            </div>
+            <form onsubmit="handlePartnerCodeVerify(event)" class="space-y-4">
+                <input type="text" id="input-partner-code-verify" required placeholder="SHOP-XXXX" class="w-full text-center tracking-widest text-xl px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-700 outline-none font-bold uppercase">
+                <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-md text-sm transition-colors">
+                    تأكيد ودخول لوحة المحل
                 </button>
             </form>
         </section>
@@ -114,11 +170,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                 <div class="bg-slate-50 p-4 border rounded-lg space-y-2">
                     <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-shield-check text-emerald-600"></i> التزامات المنصة:</h3>
-                    <p class="text-slate-600 leading-relaxed">• تقديم الدعم الفوري عند البلاغ.<br>• إرشادات وتوجيهات ضبط الشريحة المعزولة ورموز Backup Codes.<br>• تأمين الاتصال والتدخل الفوري لقفل الأجهزة.</p>
+                    <p class="text-slate-600 leading-relaxed">• تقديم الدعم الفوري والإشعارات عبر بوت التلجرام.<br>• إرشادات وتوجيهات ضبط الشريحة المعزولة ورموز Backup Codes.<br>• التدخل السريع للتعامل مع البلاغات وإغلاق الحسابات.</p>
                 </div>
                 <div class="bg-slate-50 p-4 border rounded-lg space-y-2">
                     <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-user-check text-blue-600"></i> التزامات العميل:</h3>
-                    <p class="text-slate-600 leading-relaxed">• الحفاظ على الوثيقة الورقية للرموز في البيت.<br>• حفظ الرمز الشخصي (PIN) وعدم مشاركته.<br>• إبقاء الشريحة المعزولة مشحونة وفعالة.</p>
+                    <p class="text-slate-600 leading-relaxed">• الحفاظ على الوثيقة الورقية للرموز في مكان آمن.<br>• حفظ الرمز الشخصي (PIN) وعدم مشاركته مع أي طرف.<br>• إبقاء الشريحة المعزولة مشحونة وفعالة دائماً.</p>
                 </div>
             </div>
             <div class="flex items-center justify-between border-t pt-4">
@@ -126,129 +182,554 @@
                     <input type="checkbox" id="agree-check" class="rounded text-emerald-600">
                     أطلعت على جميع الشروط والقواعد وأوافق عليها.
                 </label>
-                <button onclick="acceptAgreement()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-5 py-2.5 rounded-lg">
+                <button onclick="acceptAgreement()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition-colors">
                     تأكيد والتأهيل المباشر
                 </button>
             </div>
         </section>
 
-        <!-- VIEW 4: MAIN DASHBOARD -->
+        <!-- VIEW 4: MAIN DASHBOARD (CLIENT) -->
         <section id="view-dashboard" class="space-y-6 hidden">
             <div class="bg-slate-900 text-white rounded-xl p-6 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <span class="bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-1 rounded font-semibold">حساب مؤمن وقائياً</span>
-                    <h2 class="text-xl font-bold mt-2">لوحة التحكم والاستجابة المباشرة</h2>
-                    <p class="text-xs text-slate-400 mt-1">الحالة: <span class="text-emerald-400 font-bold">جاهزية كاملة</span></p>
+                    <h2 class="text-xl font-bold mt-2" id="dash-client-name">لوحة التحكم والاستجابة المباشرة</h2>
+                    <p class="text-xs text-slate-400 mt-1">الحالة: <span class="text-emerald-400 font-bold">جاهزية كاملة</span> | الجهاز: <span id="dash-client-device" class="text-slate-200">--</span></p>
                 </div>
-                <button onclick="sendEmergencyIncident()" class="bg-red-700 hover:bg-red-800 text-white font-bold text-xs px-5 py-3 rounded-lg shadow flex items-center gap-2 animate-pulse">
-                    <i class="fa-solid fa-triangle-exclamation text-base"></i>
-                    تقديم بلاغ سرقة عاجل (تليجرام + Supabase)
-                </button>
+                <div class="flex items-center gap-2">
+                    <button id="btn-emergency" onclick="sendEmergencyIncident()" class="bg-red-700 hover:bg-red-800 text-white font-bold text-xs px-4 py-3 rounded-lg shadow flex items-center gap-2 animate-pulse transition-colors">
+                        <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                        تقديم بلاغ سرقة عاجل
+                    </button>
+                    <button onclick="clientLogout()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs px-3 py-3 rounded-lg border border-slate-700 transition-colors" title="تسجيل الخروج">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
             </div>
             <div class="bg-white border rounded-xl p-5 shadow-sm">
                 <h3 class="font-bold text-sm text-slate-800 mb-3">خطوات الاستجابة السريعة</h3>
-                <p class="text-xs text-slate-600 leading-relaxed">عند وقوع أي طارئ، اضغط على زر بلاغ السرقة العاجل أعلاه. سيتم تسجيل البلاغ وإرساله فوراً للتنفيذ بروتوكول الحماية وتأمين الحسابات.</p>
+                <p class="text-xs text-slate-600 leading-relaxed">عند وقوع أي طارئ، اضغط على زر بلاغ السرقة العاجل أعلاه. سيتم تسجيل البلاغ سحابياً فوراً وإرسال تنبيه فوري لطاقم الطوارئ عبر **بوت تلجرام** مع تفاصيل جهازك ورمز الأمان لبدء بروتوكول القفل فوراً.</p>
             </div>
         </section>
 
         <!-- VIEW 5: PARTNER / SHOP PORTAL -->
-        <section id="view-partner" class="max-w-md mx-auto bg-white border rounded-xl shadow-md p-6 space-y-6 hidden">
-            <div class="border-b pb-3 text-center">
-                <h2 class="font-bold text-slate-900 text-lg">بوابة أصحاب المحلات والشراكة</h2>
-                <p class="text-xs text-slate-500">تسجيل محل جديد، توليد رابط الإحالة، ومتابعة الاحصائيات</p>
+        <section id="view-partner" class="max-w-3xl mx-auto bg-white border rounded-xl shadow-md overflow-hidden hidden">
+            <div class="flex border-b bg-slate-50">
+                <button id="tab-partner-login-btn" onclick="togglePartnerTab('login')" class="flex-1 py-3 font-bold text-sm text-emerald-700 border-b-2 border-emerald-600 bg-white">
+                    <i class="fa-solid fa-right-to-bracket ml-1"></i> تسجيل دخول محل
+                </button>
+                <button id="tab-partner-reg-btn" onclick="togglePartnerTab('register')" class="flex-1 py-3 font-bold text-sm text-slate-500 border-b-2 border-transparent">
+                    <i class="fa-solid fa-store ml-1"></i> تسجيل محل جديد
+                </button>
             </div>
 
-            <form onsubmit="handlePartnerRegister(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">اسم المحل التجاري</label>
-                    <input type="text" id="partner-shop-name" required placeholder="محل الأمان للهواتف" class="w-full text-sm px-3 py-2 border rounded-md outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">رقم الهاتف / الواتساب</label>
-                    <input type="tel" id="partner-phone" required placeholder="06XXXXXXXX" class="w-full text-sm px-3 py-2 border rounded-md outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">رمز إحالة مخصص للمحل</label>
-                    <input type="text" id="partner-code" required placeholder="SHOP2026" class="w-full text-sm px-3 py-2 border rounded-md outline-none uppercase font-bold">
-                </div>
-                <button type="submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-md text-sm">
-                    تسجيل المحل وإرسال الإشعار
-                </button>
-            </form>
+            <div class="p-6">
+                <!-- FORM 1: PARTNER LOGIN -->
+                <form id="form-partner-login" onsubmit="handlePartnerLogin(event)" class="space-y-4 max-w-lg mx-auto">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">رقم هاتف المحل المسجل</label>
+                        <input type="tel" id="partner-login-phone" required placeholder="05/06/07XXXXXX" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-700">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">كلمة السر</label>
+                        <input type="password" id="partner-login-password" required placeholder="••••••••" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-700">
+                    </div>
+                    <button type="submit" id="btn-partner-login" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-md text-sm transition-colors">
+                        المتابعة لرمز الإحالة
+                    </button>
+                </form>
 
-            <div class="border-t pt-4 space-y-3">
-                <h3 class="font-bold text-xs text-slate-800">متابعة إحصائيات المحل:</h3>
-                <div class="flex gap-2">
-                    <input type="text" id="check-partner-code" placeholder="أدخل رمز المحل" class="flex-1 text-sm px-3 py-1.5 border rounded-md outline-none uppercase">
-                    <button onclick="checkPartnerStats()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-md">
-                        استعلام
+                <!-- FORM 2: PARTNER REGISTER -->
+                <form id="form-partner-register" onsubmit="handlePartnerRegister(event)" class="space-y-3 max-w-lg mx-auto hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">اسم المحل التجاري</label>
+                            <input type="text" id="partner-store-name" required placeholder="محل الأمان للهواتف" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-700">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">اسم صاحب المحل</label>
+                            <input type="text" id="partner-owner-name" required placeholder="الاسم واللقب" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-700">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">رقم الهاتف / الواتساب</label>
+                            <input type="tel" id="partner-phone" required placeholder="05/06/07XXXXXX" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-700">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">كلمة السر لحساب المحل</label>
+                            <input type="password" id="partner-password" required placeholder="••••••••" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-emerald-700">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">نوع النشاط التكنولوجي</label>
+                        <select id="partner-business-type" required class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-white focus:ring-2 focus:ring-emerald-700">
+                            <option value="">اختر نوع النشاط...</option>
+                            <option value="بيع وصيانة الهواتف">بيع وصيانة الهواتف الذكية</option>
+                            <option value="صيانة وإصلاح الكمبيوتر">صيانة وإصلاح الكمبيوتر والحواسيب</option>
+                            <option value="السوفتوير وتأمين الحسابات">البرمجيات (السوفتوير) وتأمين الحسابات</option>
+                            <option value="بيع الإكسسوارات والشرائح">بيع الإكسسوارات وشرائح الاتصال</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">الولاية (58 ولاية)</label>
+                            <select id="partner-state" onchange="updateMunicipalities('partner-state', 'partner-municipality')" required class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-white focus:ring-2 focus:ring-emerald-700">
+                                <option value="">اختر الولاية...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">البلدية</label>
+                            <select id="partner-municipality" required class="w-full text-sm px-3 py-2 border rounded-md outline-none bg-white focus:ring-2 focus:ring-emerald-700">
+                                <option value="">اختر الولاية أولاً...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">كود الإحالة التلقائي (قابل للتعديل)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="partner-code" required placeholder="SHOP-XXXX" class="w-full text-sm px-3 py-2 border rounded-md outline-none uppercase font-bold bg-slate-50 focus:ring-2 focus:ring-emerald-700">
+                            <button type="button" onclick="generatePartnerCode()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 text-xs rounded font-bold transition-colors" title="توليد كود جديد">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-partner-register" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-bold py-2.5 rounded-md text-sm transition-colors">
+                        تسجيل المحل وتأكيد كود الإحالة
                     </button>
-                </div>
-                <div id="partner-stats-result" class="hidden bg-slate-50 border p-3 rounded-md text-xs space-y-2">
-                    <p class="text-slate-700">عدد الزبائن المسجلين عبر رمزك: <span id="partner-count" class="font-bold text-emerald-600">0</span></p>
-                    <button onclick="copyPartnerLink()" class="w-full bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold py-1.5 rounded border border-emerald-300">
-                        <i class="fa-solid fa-copy"></i> نسخ رابط الإحالة المباشر
-                    </button>
+                </form>
+
+                <!-- SHOP DASHBOARD VIEW (UPDATED: ONLY COUNT) -->
+                <div id="partner-dashboard-details" class="hidden space-y-6">
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-emerald-700 text-white rounded-full flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-store"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base" id="partner-dash-name">محل الأمان</h3>
+                                <p class="text-xs text-slate-500">رمز الإحالة الخاص بك: <span id="partner-dash-code" class="font-bold text-emerald-700 bg-white px-2 py-0.5 rounded border">---</span></p>
+                            </div>
+                        </div>
+                        <button onclick="logoutPartner()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-md text-xs transition-colors">
+                            <i class="fa-solid fa-right-from-bracket ml-1"></i> تسجيل الخروج
+                        </button>
+                    </div>
+
+                    <!-- Stats & Info Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 p-4 border rounded-lg space-y-1">
+                            <span class="text-xs text-slate-500">اسم المالك:</span>
+                            <h4 id="partner-dash-owner" class="font-bold text-slate-800 text-sm">--</h4>
+                        </div>
+                        <div class="bg-slate-50 p-4 border rounded-lg space-y-1">
+                            <span class="text-xs text-slate-500">نوع النشاط:</span>
+                            <h4 id="partner-dash-type" class="font-bold text-slate-800 text-sm">--</h4>
+                        </div>
+                        <div class="bg-emerald-900 text-white p-4 rounded-lg shadow-sm flex flex-col justify-center items-center text-center">
+                            <span class="text-xs text-emerald-300">إجمالي الزبائن المحالين عبر كودك</span>
+                            <h3 id="partner-referrals-count" class="text-3xl font-bold mt-1">0</h3>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
+
+        <!-- VIEW 6: ADMIN LOGIN -->
+        <section id="view-admin-login" class="max-w-md mx-auto bg-white border border-slate-300 rounded-xl shadow-md p-6 space-y-4 hidden">
+            <div class="text-center border-b pb-3">
+                <i class="fa-solid fa-user-shield text-slate-800 text-3xl mb-1"></i>
+                <h2 class="font-bold text-slate-900 text-lg">لوحة دخول الإدارة</h2>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">كلمة سر الإدارة</label>
+                    <input type="password" id="admin-password" required placeholder="••••••••" class="w-full text-sm px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-slate-800">
+                </div>
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-md text-sm transition-colors">
+                    دخول لوحة التحليلات والبلاغات
+                </button>
+            </form>
+        </section>
+
+        <!-- VIEW 7: ADMIN DASHBOARD -->
+        <section id="view-admin-dashboard" class="space-y-6 hidden">
+            <div class="flex justify-between items-center bg-slate-900 text-white p-4 rounded-xl shadow">
+                <div>
+                    <h2 class="font-bold text-lg"><i class="fa-solid fa-chart-line text-emerald-400"></i> لوحة الإدارة العامة وإدارة البيانات السحابية</h2>
+                    <p class="text-xs text-slate-400">تحكم كامل بمزامنة مباشرة مع Supabase</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="loadAdminData()" class="bg-emerald-700 hover:bg-emerald-800 text-xs text-white px-3 py-2 rounded font-semibold flex items-center gap-1 transition-colors">
+                        <i class="fa-solid fa-rotate"></i> تحديث
+                    </button>
+                    <button onclick="adminLogout()" class="bg-slate-800 hover:bg-slate-700 text-xs text-white px-3 py-2 rounded font-semibold transition-colors">
+                        خروج
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-xl border shadow-sm text-center">
+                    <p class="text-xs text-slate-500">إجمالي الزبائن المشتركين</p>
+                    <h3 id="stat-clients" class="text-2xl font-bold text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-xl border shadow-sm text-center">
+                    <p class="text-xs text-slate-500">إجمالي المحلات الشريكة</p>
+                    <h3 id="stat-partners" class="text-2xl font-bold text-emerald-700 mt-1">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-xl border shadow-sm text-center">
+                    <p class="text-xs text-slate-500">إجمالي بلاغات السرقة</p>
+                    <h3 id="stat-incidents" class="text-2xl font-bold text-red-700 mt-1">0</h3>
+                </div>
+            </div>
+
+            <!-- CLIENTS TABLE -->
+            <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-users text-slate-700"></i> قائمة الزبائن والتحكم السحابي</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-right border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700">
+                                <th class="p-2 border">الاسم الكامل</th>
+                                <th class="p-2 border">البريد الإلكتروني</th>
+                                <th class="p-2 border">الهاتف</th>
+                                <th class="p-2 border">الولاية / البلدية</th>
+                                <th class="p-2 border">الجهاز</th>
+                                <th class="p-2 border">رمز PIN</th>
+                                <th class="p-2 border">كود المحل</th>
+                                <th class="p-2 border text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clients-table-body">
+                            <tr><td colspan="8" class="p-3 text-center text-slate-400">جاري تحميل بيانات الزبائن...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PARTNERS TABLE -->
+            <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-store text-emerald-600"></i> قائمة المحلات الشريكة</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-right border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700">
+                                <th class="p-2 border">اسم المحل</th>
+                                <th class="p-2 border">المالك</th>
+                                <th class="p-2 border">النشاط</th>
+                                <th class="p-2 border">الهاتف</th>
+                                <th class="p-2 border">الولاية / البلدية</th>
+                                <th class="p-2 border">رمز الإحالة</th>
+                                <th class="p-2 border text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partners-table-body">
+                            <tr><td colspan="7" class="p-3 text-center text-slate-400">لا توجد محلات مسجلة</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- INCIDENTS TABLE -->
+            <div class="bg-white border rounded-xl p-4 shadow-sm space-y-3">
+                <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-bell text-red-600"></i> سجل بلاغات الطوارئ الأخيرة</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-right border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700">
+                                <th class="p-2 border">الهاتف</th>
+                                <th class="p-2 border">رمز PIN</th>
+                                <th class="p-2 border">الوقت</th>
+                            </tr>
+                        </thead>
+                        <tbody id="incidents-table-body">
+                            <tr><td colspan="3" class="p-3 text-center text-slate-400">لا توجد بلاغات مسجلة حالياً</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDIT CLIENT MODAL -->
+        <div id="modal-edit-client" class="fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6 space-y-4">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h3 class="font-bold text-slate-900 text-base"><i class="fa-solid fa-user-pen text-emerald-600"></i> تعديل بيانات الزبون سحابياً</h3>
+                    <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <form onsubmit="saveClientEdits(event)" class="space-y-3">
+                    <input type="hidden" id="edit-client-id">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">الاسم الكامل</label>
+                        <input type="text" id="edit-client-name" required class="w-full text-xs px-3 py-2 border rounded outline-none focus:ring-2 focus:ring-emerald-600">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">البريد الإلكتروني</label>
+                            <input type="email" id="edit-client-email" required class="w-full text-xs px-3 py-2 border rounded outline-none focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">كلمة السر</label>
+                            <input type="text" id="edit-client-password" required class="w-full text-xs px-3 py-2 border rounded outline-none focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">الهاتف</label>
+                            <input type="tel" id="edit-client-phone" required class="w-full text-xs px-3 py-2 border rounded outline-none focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">رمز PIN</label>
+                            <input type="text" maxlength="6" id="edit-client-pin" required class="w-full text-xs px-3 py-2 border rounded outline-none font-bold focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">الولاية</label>
+                            <select id="edit-client-state" onchange="updateMunicipalities('edit-client-state', 'edit-client-municipality')" class="w-full text-xs px-3 py-2 border rounded outline-none bg-white focus:ring-2 focus:ring-emerald-600"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">البلدية</label>
+                            <select id="edit-client-municipality" class="w-full text-xs px-3 py-2 border rounded outline-none bg-white focus:ring-2 focus:ring-emerald-600"></select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">الجهاز</label>
+                            <select id="edit-client-device" class="w-full text-xs px-3 py-2 border rounded outline-none bg-white focus:ring-2 focus:ring-emerald-600">
+                                <option value="Android">Android</option>
+                                <option value="iPhone">iPhone</option>
+                                <option value="PC/Laptop">PC/Laptop</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">كود المحل الشريك</label>
+                            <input type="text" id="edit-client-partner" class="w-full text-xs px-3 py-2 border rounded outline-none uppercase bg-slate-50 focus:ring-2 focus:ring-emerald-600">
+                        </div>
+                    </div>
+                    <div class="flex gap-2 pt-2">
+                        <button type="submit" id="btn-save-edit" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 rounded text-xs transition-colors">
+                            حفظ التعديلات في Supabase
+                        </button>
+                        <button type="button" onclick="closeEditModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded text-xs transition-colors">
+                            إلغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
     </main>
 
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 text-xs py-4 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p>© 2026 المنصة الرقمية للتأمين والاستجابة للطوارئ. جميع الحقوق محفوظة.</p>
+            <p>© 2026 المنصة الرقمية للتأمين واستجابة الطوارئ. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
     <!-- SCRIPT LOGIC -->
     <script>
+        // إعدادات Supabase
         const SUPABASE_URL = "https://uephhkjfarwvmeaygzad.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_61DrLse6xMy--aJC_CGHTw_sbGLFUKr";
-
-        // مفاتيح بوت تليجرام
-        const TELEGRAM_BOT_TOKEN = "8834192687:AAHmRHxmB5mWvw5DTdbHlYaa58OcMQkJk5Q";
-        const TELEGRAM_CHAT_ID = "7678787705";
+        
+        // إعدادات بوت التلجرام المُحدّثة
+        const TELEGRAM_BOT_TOKEN = "8834192687:AAHmRHxmB5mWvw5DTdbHlYaa58OcMQkJk5Q"; 
+        const TELEGRAM_CHAT_ID = "7678787705";     
 
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let currentClient = null;
+        let currentPartner = null;
+        let clientsListCache = [];
 
-        // دالة إرسال الإشعار الخفي والآلي عبر تليجرام
+        // بيانات الولايات والبلديات (58 ولاية)
+        const algeriaData = {
+            "01- أدرار": ["أدرار", "تامست", "شروين", "رقان"],
+            "02- الشلف": ["الشلف", "تنس", "أبو الحسن", "تاوقريت"],
+            "03- الأغواط": ["الأغواط", "أفلو", "حاسي الرمل"],
+            "04- أم البواقي": ["أم البواقي", "عين البيضاء", "عين مليلة"],
+            "05- باتنة": ["باتنة", "أريس", "بريكة"],
+            "06- بجاية": ["بجاية", "أقبو", "القصر"],
+            "07- بسكرة": ["بسكرة", "طولقة", "سيدي عقبة"],
+            "08- بشار": ["بشار", "القنادسة", "تاغيت"],
+            "09- البليدة": ["البليدة", "بوفاريك", "العفرون"],
+            "10- البويرة": ["البويرة", "الأخضرية", "سور الغزلان"],
+            "11- تمنراست": ["تمنراست", "عين أمقل"],
+            "12- تبسة": ["تبسة", "الشريعة", "الونزة"],
+            "13- تلمسان": ["تلمسان", "مغنية", "الرمشي"],
+            "14- تيارت": ["تيارت", "فرندة", "السوقر"],
+            "15- تيزي وزو": ["تيزي وزو", "أزازقة", "ذراع الميزان"],
+            "16- الجزائر": ["باب حسن", "الجزائر الوسطى", "الشراقة", "دالي إبراهيم", "حسين داي", "باب الزوار", "الرويبة"],
+            "17- الجلفة": ["الجلفة", "حاسي بحبح", "مسعد"],
+            "18- جيجل": ["جيجل", "جيملة", "الميلية"],
+            "19- سطيف": ["سطيف", "العلمة", "عين ولمان"],
+            "20- سعيدة": ["سعيدة", "الحساسنة"],
+            "21- سكيكدة": ["سكيكدة", "الحروش", "القل"],
+            "22- سيدي بلعباس": ["سيدي بلعباس", "سفيزف", "بن باديس"],
+            "23- عنابة": ["عنابة", "البوني", "الحجار"],
+            "24- قالة": ["قالمة", "وادي الزناتي", "بوشقوف"],
+            "25- قسنطينة": ["قسنطينة", "الخروب", "حامة بوزيان"],
+            "26- المدية": ["المدية", "البرواقية", "قصر البخاري"],
+            "27- مستغانم": ["مستغانم", "عين تادلس"],
+            "28- المسيلة": ["المسيلة", "بوسعادة", "سيدي عيسى"],
+            "29- معسكر": ["معسكر", "سيق", "تغنيف"],
+            "30- ورقلة": ["ورقلة", "تقرت", "حاسي مسعود"],
+            "31- وهران": ["وهران", "إيسر", "السانية", "أرزيو"],
+            "32- البيض": ["البيض", "بوقطب"],
+            "33- إليزي": ["إليزي", "جانت"],
+            "34- برج بوعريريج": ["برج بوعريريج", "راس الوادي"],
+            "35- بومرداس": ["بومرداس", "برج منايل", "بودواو"],
+            "36- الطارف": ["القالة", "الطارف"],
+            "37- تندوف": ["تندوف"],
+            "38- تسمسيلت": ["تسمسيلت", "ثنية الحد"],
+            "39- الوادي": ["الوادي", "جامعة", "قمار"],
+            "40- خنشلة": ["خنشلة", "قايس"],
+            "41- سوق أهراس": ["سوق أهراس", "سدراتة"],
+            "42- تيبازة": ["تيبازة", "شرشال", "قليعة"],
+            "43- ميلة": ["ميلة", "شلبغوم العيد"],
+            "44- عين الدفلى": ["عين الدفلى", "خميس مليانة"],
+            "45- النعامة": ["النعامة", "مشرية"],
+            "46- عين تموشنت": ["عين تموشنت", "بني صاف"],
+            "47- غرداية": ["غرداية", "القرارة", "متليلي"],
+            "48- غليزان": ["غليزان", "وادي ارهيو"],
+            "49- المغير": ["المغير", "جامعة"],
+            "50- المنيعة": ["المنيعة"],
+            "51- أولاد جلال": ["أولاد جلال", "سيدي خالد"],
+            "52- برج باجي مختار": ["برج باجي مختار"],
+            "53- بني عباس": ["بني عباس"],
+            "54- تيميمون": ["تيميمون"],
+            "55- تقرت": ["تقرت"],
+            "56- جانت": ["جانت"],
+            "57- إن صالح": ["إن صالح"],
+            "58- إن قزام": ["إن قزام"]
+        };
+
+        // تهيئة الولايات عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            initStates('reg-state');
+            initStates('partner-state');
+            initStates('edit-client-state');
+            generatePartnerCode();
+        });
+
+        function initStates(selectId) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            select.innerHTML = '<option value="">اختر الولاية...</option>';
+            Object.keys(algeriaData).forEach(st => {
+                const opt = document.createElement('option');
+                opt.value = st;
+                opt.textContent = st;
+                select.appendChild(opt);
+            });
+        }
+
+        function updateMunicipalities(stateSelectId, muniSelectId) {
+            const stateVal = document.getElementById(stateSelectId).value;
+            const muniSelect = document.getElementById(muniSelectId);
+            muniSelect.innerHTML = '<option value="">اختر البلدية...</option>';
+
+            if (stateVal && algeriaData[stateVal]) {
+                algeriaData[stateVal].forEach(muni => {
+                    const opt = document.createElement('option');
+                    opt.value = muni;
+                    opt.textContent = muni;
+                    muniSelect.appendChild(opt);
+                });
+            }
+        }
+
+        function generatePartnerCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let randomCode = '';
+            for (let i = 0; i < 4; i++) {
+                randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            const fullCode = `SHOP-${randomCode}`;
+            const input = document.getElementById('partner-code');
+            if (input) input.value = fullCode;
+        }
+
+        function sanitizeInput(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            }).trim();
+        }
+
+        function validateAlgerianPhone(phone) {
+            const regex = /^(05|06|07)[0-9]{8}$/;
+            return regex.test(phone);
+        }
+
+        function getFriendlyErrorMessage(error) {
+            if (!error) return "حدث خطأ غير معروف، يرجى المحاولة لاحقاً.";
+            const msg = error.message ? error.message.toLowerCase() : error.toLowerCase();
+
+            if (msg.includes("unique constraint") || msg.includes("duplicate key") || msg.includes("already registered")) {
+                return "⚠️ هذا البريد الإلكتروني أو رقم الهاتف مسجل مسبقاً في النظام، يرجى استخدام بيانات أخرى أو تسجيل الدخول.";
+            }
+            if (msg.includes("invalid login credentials") || msg.includes("row-level security")) {
+                return "⚠️ بيانات الدخول غير صحيحة، يرجى التحقق من البريد الإلكتروني وكلمة المرور.";
+            }
+            if (msg.includes("network") || msg.includes("failed to fetch")) {
+                return "🌐 تعذر الاتصال بالخادم، يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.";
+            }
+            if (msg.includes("violates not-null constraint")) {
+                return "📝 يرجى استيفاء جميع الحقول المطلوبة بشكل صحيح.";
+            }
+            return "❌ تعذر إتمام العملية: " + (error.message || error);
+        }
+
         async function sendTelegramNotification(message) {
+            if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.includes("YOUR_")) return;
             try {
                 const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
                 await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        chat_id: TELEGRAM_CHAT_ID, 
-                        text: message,
-                        parse_mode: 'HTML'
-                    })
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'HTML' })
                 });
             } catch (err) {
-                console.error("Telegram notification error:", err);
+                console.error("خطأ في الاتصال بالتلجرام:", err);
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const refCode = urlParams.get('ref');
-            if (refCode) {
-                const partnerInput = document.getElementById('reg-partner-code');
-                partnerInput.value = refCode.toUpperCase();
-                partnerInput.readOnly = true;
-                partnerInput.classList.add('bg-emerald-50', 'text-emerald-800', 'font-bold');
-                toggleAuthTab('register');
-            }
-        });
-
+        // دالة التنقل وإفراغ الحقول عند الحاجة
         function switchView(viewName) {
-            ['auth', 'pin-verification', 'agreement', 'dashboard', 'partner'].forEach(v => {
-                document.getElementById(`view-${v}`).classList.add('hidden');
+            ['auth', 'pin-verification', 'partner-code-verification', 'agreement', 'dashboard', 'partner', 'admin-login', 'admin-dashboard'].forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (el) el.classList.add('hidden');
             });
             document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            if (viewName === 'auth') {
+                document.getElementById('form-login').reset();
+                document.getElementById('form-register').reset();
+                currentClient = null;
+            } else if (viewName === 'partner') {
+                document.getElementById('form-partner-login').reset();
+                document.getElementById('form-partner-register').reset();
+                document.getElementById('partner-dashboard-details').classList.add('hidden');
+                currentPartner = null;
+            }
+        }
+
+        function clientLogout() {
+            currentClient = null;
+            switchView('auth');
+        }
+
+        function adminLogout() {
+            document.getElementById('admin-password').value = '';
+            switchView('auth');
         }
 
         function toggleAuthTab(tab) {
@@ -267,46 +748,111 @@
             }
         }
 
-        // 1. تسجيل عميل جديد
+        function togglePartnerTab(tab) {
+            const loginBtn = document.getElementById('tab-partner-login-btn');
+            const regBtn = document.getElementById('tab-partner-reg-btn');
+            document.getElementById('partner-dashboard-details').classList.add('hidden');
+
+            if (tab === 'login') {
+                loginBtn.className = "flex-1 py-3 font-bold text-sm text-emerald-700 border-b-2 border-emerald-600 bg-white";
+                regBtn.className = "flex-1 py-3 font-bold text-sm text-slate-500 border-b-2 border-transparent";
+                document.getElementById('form-partner-login').classList.remove('hidden');
+                document.getElementById('form-partner-register').classList.add('hidden');
+            } else {
+                regBtn.className = "flex-1 py-3 font-bold text-sm text-emerald-700 border-b-2 border-emerald-600 bg-white";
+                loginBtn.className = "flex-1 py-3 font-bold text-sm text-slate-500 border-b-2 border-transparent";
+                document.getElementById('form-partner-register').classList.remove('hidden');
+                document.getElementById('form-partner-login').classList.add('hidden');
+                generatePartnerCode();
+            }
+        }
+
         async function handleRegister(e) {
             e.preventDefault();
-            const name = document.getElementById('reg-name').value;
-            const phone = document.getElementById('reg-phone').value;
-            const email = document.getElementById('reg-email').value;
-            const pin = document.getElementById('reg-pin').value;
-            const partnerCode = document.getElementById('reg-partner-code').value.toUpperCase() || 'بدون إحالة';
+            const btn = document.getElementById('btn-register');
+            const originalText = btn.innerHTML;
 
-            const { data, error } = await db.from('clients').insert([
-                { full_name: name, phone: phone, email: email, emergency_pin: pin, partner_code: partnerCode === 'بدون إحالة' ? null : partnerCode }
-            ]).select();
-
-            if (error) {
-                alert("خطأ في تسجيل الحساب: " + error.message);
+            const phone = sanitizeInput(document.getElementById('reg-phone').value);
+            if (!validateAlgerianPhone(phone)) {
+                alert("يرجى إدخال رقم هاتف جزائري صحيح يتكون من 10 أرقام ويبدأ بـ 05 أو 06 أو 07.");
                 return;
             }
 
-            currentClient = data[0];
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري حفظ البيانات...';
 
-            // إشعار تليجرام مصنف بأيقونة الزبون
-            const telegramMsg = `👤 <b>[تسجيل زبون جديد]</b>\n\n• <b>الاسم:</b> ${name}\n• <b>الهاتف:</b> <code>${phone}</code>\n• <b>البريد:</b> ${email}\n• <b>الرمز الشخصي (PIN):</b> <code>${pin}</code>\n• <b>كود المحل:</b> ${partnerCode}`;
-            sendTelegramNotification(telegramMsg);
+            const name = sanitizeInput(document.getElementById('reg-name').value);
+            const email = sanitizeInput(document.getElementById('reg-email').value);
+            const password = document.getElementById('reg-password').value;
+            const state = document.getElementById('reg-state').value;
+            const municipality = document.getElementById('reg-municipality').value;
+            const deviceType = document.getElementById('reg-device-type').value;
+            const pin = document.getElementById('reg-pin').value;
+            const partnerCode = sanitizeInput(document.getElementById('reg-partner-code').value).toUpperCase() || null;
 
-            switchView('agreement');
+            try {
+                const { data, error } = await db.from('clients').insert([{ 
+                    full_name: name, 
+                    phone: phone, 
+                    email: email, 
+                    password: password,
+                    state: state,
+                    municipality: municipality,
+                    device_type: deviceType,
+                    emergency_pin: pin, 
+                    partner_code: partnerCode 
+                }]).select();
+
+                if (error) {
+                    alert(getFriendlyErrorMessage(error));
+                    return;
+                }
+
+                currentClient = data[0];
+                const msg = `👤 <b>مشترك جديد ينضم للمنصة:</b>\n\n• <b>الاسم:</b> ${name}\n• <b>الهاتف:</b> ${phone}\n• <b>الولاية/البلدية:</b> ${state} / ${municipality}\n• <b>الجهاز:</b> ${deviceType}\n• <b>رمز المحل:</b> ${partnerCode || 'مباشر'}`;
+                await sendTelegramNotification(msg);
+
+                switchView('agreement');
+            } catch (err) {
+                alert(getFriendlyErrorMessage(err));
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
         }
 
         async function handleLogin(e) {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
+            const btn = document.getElementById('btn-login');
+            const originalText = btn.innerHTML;
 
-            const { data, error } = await db.from('clients').select('*').eq('email', email).single();
+            const email = sanitizeInput(document.getElementById('login-email').value);
+            const password = document.getElementById('login-password').value;
 
-            if (error || !data) {
-                alert("البريد الإلكتروني غير مسجل مسبقاً.");
-                return;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري التحقق...';
+
+            try {
+                const { data, error } = await db.from('clients')
+                    .select('*')
+                    .eq('email', email)
+                    .eq('password', password)
+                    .single();
+
+                if (error || !data) {
+                    alert("⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة، يرجى المحاولة مرة أخرى.");
+                    return;
+                }
+
+                currentClient = data;
+                document.getElementById('form-login').reset();
+                switchView('pin-verification');
+            } catch (err) {
+                alert(getFriendlyErrorMessage(err));
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
             }
-
-            currentClient = data;
-            switchView('pin-verification');
         }
 
         function handlePinVerify(e) {
@@ -314,9 +860,12 @@
             const inputPin = document.getElementById('input-pin').value;
 
             if (currentClient && currentClient.emergency_pin === inputPin) {
+                document.getElementById('input-pin').value = '';
+                document.getElementById('dash-client-name').textContent = "أهلاً بك، " + currentClient.full_name;
+                document.getElementById('dash-client-device').textContent = currentClient.device_type || 'غير محدد';
                 switchView('dashboard');
             } else {
-                alert("الرمز الشخصي (PIN) غير صحيح!");
+                alert("⚠️ الرمز الشخصي (PIN) غير صحيح!");
             }
         }
 
@@ -325,70 +874,360 @@
                 alert("يرجى التأشير بالموافقة على الشروط للمتابعة.");
                 return;
             }
+            if(currentClient) {
+                document.getElementById('dash-client-name').textContent = "أهلاً بك، " + currentClient.full_name;
+                document.getElementById('dash-client-device').textContent = currentClient.device_type || 'غير محدد';
+            }
             switchView('dashboard');
         }
 
-        // 2. إرسال بلاغ طارئ تلقائياً
         async function sendEmergencyIncident() {
             if (!currentClient) return;
 
-            await db.from('incidents').insert([
-                { client_phone: currentClient.phone, emergency_pin: currentClient.emergency_pin }
-            ]);
+            const btn = document.getElementById('btn-emergency');
+            const originalText = btn.innerHTML;
 
-            // إشعار طوارئ عاجل ومميز بأيقونات التحذير
-            const telegramMsg = `🚨 <b>[بلاغ سرقة عاجل - طوارئ]</b> 🚨\n\n• <b>العميل:</b> ${currentClient.full_name}\n• <b>رقم الهاتف:</b> <code>${currentClient.phone}</code>\n• <b>الرمز الشخصي للتأكيد:</b> <code>${currentClient.emergency_pin}</code>\n\n⚠️ <i>الرجاء البدء في بروتوكول قفل واسترجاع الحسابات فوراً!</i>`;
-            
-            await sendTelegramNotification(telegramMsg);
-            alert("تم إرسال بلاغ الطوارئ بنجاح! سيتم التواصل معك والبدء في إجراءات التأمين فوراً.");
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري إرسال البلاغ...';
+
+            try {
+                await db.from('incidents').insert([
+                    { client_phone: currentClient.phone, emergency_pin: currentClient.emergency_pin }
+                ]);
+
+                const msg = `🚨 <b>بلاغ سرقة عاجل ومباشر!</b> 🚨\n\n• <b>العميل:</b> ${currentClient.full_name}\n• <b>الهاتف:</b> ${currentClient.phone}\n• <b>الموقع:</b> ${currentClient.state || ''} - ${currentClient.municipality || ''}\n• <b>الجهاز:</b> ${currentClient.device_type || 'غير محدد'}\n• <b>الرمز الشخصي:</b> <code>${currentClient.emergency_pin}</code>`;
+                
+                await sendTelegramNotification(msg);
+                alert("تم إرسال بلاغك فوراً إلى فريق الطوارئ عبر بوت تلجرام.");
+            } catch (err) {
+                alert(getFriendlyErrorMessage(err));
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
         }
 
-        // 3. تسجيل محل شراكة جديد
+        async function handlePartnerLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-partner-login');
+            const originalText = btn.innerHTML;
+
+            const phone = sanitizeInput(document.getElementById('partner-login-phone').value);
+            const password = document.getElementById('partner-login-password').value;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري التحقق من الحساب...';
+
+            try {
+                const { data, error } = await db.from('partners')
+                    .select('*')
+                    .eq('phone', phone)
+                    .eq('password', password)
+                    .single();
+
+                if (error || !data) {
+                    alert("⚠️ رقم الهاتف أو كلمة السر غير صحيحة.");
+                    return;
+                }
+
+                currentPartner = data;
+                document.getElementById('form-partner-login').reset();
+                // الانتقال لخطوة إدخال رمز الإحالة الخاص به للتأكيد
+                switchView('partner-code-verification');
+            } catch (err) {
+                alert(getFriendlyErrorMessage(err));
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        function handlePartnerCodeVerify(e) {
+            e.preventDefault();
+            const inputCode = sanitizeInput(document.getElementById('input-partner-code-verify').value).toUpperCase();
+
+            if (currentPartner && currentPartner.partner_code === inputCode) {
+                document.getElementById('input-partner-code-verify').value = '';
+                showPartnerDashboard(currentPartner);
+            } else {
+                alert("⚠️ رمز الإحالة غير صحيح لهذا المحل!");
+            }
+        }
+
         async function handlePartnerRegister(e) {
             e.preventDefault();
-            const shopName = document.getElementById('partner-shop-name').value;
-            const phone = document.getElementById('partner-phone').value;
-            const code = document.getElementById('partner-code').value.toUpperCase();
+            const btn = document.getElementById('btn-partner-register');
+            const originalText = btn.innerHTML;
 
-            const { error } = await db.from('partners').insert([
-                { shop_name: shopName, phone: phone, partner_code: code }
-            ]);
-
-            if (error) {
-                alert("خطأ في تسجيل المحل: " + error.message);
+            const phone = sanitizeInput(document.getElementById('partner-phone').value);
+            if (!validateAlgerianPhone(phone)) {
+                alert("يرجى إدخال رقم هاتف جزائري صحيح للشركة (10 أرقام تبدأ بـ 05/06/07).");
                 return;
             }
 
-            // إشعار تليجرام مصنف بأيقونة المحلات
-            const telegramMsg = `🏪 <b>[تسجيل محل شراكة جديد]</b>\n\n• <b>اسم المحل:</b> ${shopName}\n• <b>رقم الهاتف:</b> <code>${phone}</code>\n• <b>رمز الإحالة المخصص:</b> <code>${code}</code>`;
-            sendTelegramNotification(telegramMsg);
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري تسجيل المحل...';
 
-            document.getElementById('check-partner-code').value = code;
-            checkPartnerStats();
-            alert(`تم تسجيل المحل بنجاح وإرسال الإشعار!`);
-        }
+            const storeName = sanitizeInput(document.getElementById('partner-store-name').value);
+            const ownerName = sanitizeInput(document.getElementById('partner-owner-name').value);
+            const password = document.getElementById('partner-password').value;
+            const businessType = document.getElementById('partner-business-type').value;
+            const state = document.getElementById('partner-state').value;
+            const municipality = document.getElementById('partner-municipality').value;
+            const code = sanitizeInput(document.getElementById('partner-code').value).toUpperCase();
 
-        async function checkPartnerStats() {
-            const code = document.getElementById('check-partner-code').value.toUpperCase();
-            if (!code) return;
+            try {
+                const { data, error } = await db.from('partners').insert([{ 
+                    store_name: storeName, 
+                    owner_name: ownerName, 
+                    password: password,
+                    business_type: businessType,
+                    phone: phone, 
+                    state: state, 
+                    municipality: municipality,
+                    partner_code: code 
+                }]).select();
 
-            const { count, error } = await db
-                .from('clients')
-                .select('*', { count: 'exact', head: true })
-                .eq('partner_code', code);
+                if (error) {
+                    alert(getFriendlyErrorMessage(error));
+                } else {
+                    const msg = `🏪 <b>انضمام محل شريك جديد:</b>\n\n• <b>المحل:</b> ${storeName}\n• <b>المالك:</b> ${ownerName}\n• <b>النشاط:</b> ${businessType}\n• <b>الهاتف:</b> ${phone}\n• <b>الموقع:</b> ${state} - ${municipality}\n• <b>رمز الإحالة:</b> <code>${code}</code>`;
+                    await sendTelegramNotification(msg);
 
-            if (!error) {
-                document.getElementById('partner-count').textContent = count || 0;
-                document.getElementById('partner-stats-result').classList.remove('hidden');
+                    currentPartner = data[0];
+                    document.getElementById('form-partner-register').reset();
+                    alert(`تم تسجيل المحل بنجاح! رمز الإحالة الخاص بك هو: ${code}`);
+                    showPartnerDashboard(currentPartner);
+                }
+            } catch (err) {
+                alert(getFriendlyErrorMessage(err));
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
             }
         }
 
-        function copyPartnerLink() {
-            const code = document.getElementById('check-partner-code').value.toUpperCase();
-            const link = `${window.location.origin}${window.location.pathname}?ref=${code}`;
-            navigator.clipboard.writeText(link).then(() => {
-                alert("تم نسخ رابط الإحالة المباشر للمحل:\n" + link);
+        // عرض لوحة تحكم المحل وجلب عدد الزبائن المحالين فقط
+        async function showPartnerDashboard(partner) {
+            ['auth', 'pin-verification', 'partner-code-verification', 'agreement', 'dashboard', 'partner', 'admin-login', 'admin-dashboard'].forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (el) el.classList.add('hidden');
             });
+            document.getElementById('view-partner').classList.remove('hidden');
+            document.getElementById('form-partner-login').classList.add('hidden');
+            document.getElementById('form-partner-register').classList.add('hidden');
+            
+            document.getElementById('partner-dash-name').textContent = partner.store_name;
+            document.getElementById('partner-dash-code').textContent = partner.partner_code;
+            document.getElementById('partner-dash-owner').textContent = partner.owner_name || '--';
+            document.getElementById('partner-dash-type').textContent = partner.business_type || '--';
+
+            document.getElementById('partner-dashboard-details').classList.remove('hidden');
+            
+            // جلب العدد فقط
+            await refreshPartnerReferralsCount();
+        }
+
+        async function refreshPartnerReferralsCount() {
+            if (!currentPartner) return;
+            const countBadge = document.getElementById('partner-referrals-count');
+            countBadge.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-lg"></i>';
+
+            try {
+                const { count, error } = await db.from('clients')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('partner_code', currentPartner.partner_code);
+
+                if (error) {
+                    countBadge.textContent = '0';
+                    return;
+                }
+
+                countBadge.textContent = count || 0;
+            } catch (err) {
+                console.error(err);
+                countBadge.textContent = '0';
+            }
+        }
+
+        function logoutPartner() {
+            currentPartner = null;
+            togglePartnerTab('login');
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-password').value;
+            if (pass === "admin123") {
+                switchView('admin-dashboard');
+                loadAdminData();
+            } else {
+                alert("⚠️ كلمة سر الإدارة غير صحيحة!");
+            }
+        }
+
+        async function loadAdminData() {
+            const clientBody = document.getElementById('clients-table-body');
+            const partBody = document.getElementById('partners-table-body');
+            const incBody = document.getElementById('incidents-table-body');
+
+            clientBody.innerHTML = `<tr><td colspan="8" class="p-3 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري تحميل بيانات الزبائن...</td></tr>`;
+            partBody.innerHTML = `<tr><td colspan="7" class="p-3 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري تحميل المحلات...</td></tr>`;
+            incBody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري تحميل البلاغات...</td></tr>`;
+
+            const clientsRes = await db.from('clients').select('*');
+            const partnersRes = await db.from('partners').select('*');
+            const incidentsRes = await db.from('incidents').select('*');
+
+            clientsListCache = clientsRes.data || [];
+
+            document.getElementById('stat-clients').textContent = clientsRes.data ? clientsRes.data.length : 0;
+            document.getElementById('stat-partners').textContent = partnersRes.data ? partnersRes.data.length : 0;
+            document.getElementById('stat-incidents').textContent = incidentsRes.data ? incidentsRes.data.length : 0;
+
+            if (clientsListCache.length > 0) {
+                clientBody.innerHTML = clientsListCache.map(c => `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="p-2 border font-bold text-slate-800">${c.full_name || '--'}</td>
+                        <td class="p-2 border text-slate-600">${c.email || '--'}</td>
+                        <td class="p-2 border font-semibold">${c.phone || '--'}</td>
+                        <td class="p-2 border text-slate-600">${c.state || ''} / ${c.municipality || ''}</td>
+                        <td class="p-2 border text-slate-600">${c.device_type || '--'}</td>
+                        <td class="p-2 border text-red-600 font-bold font-mono">${c.emergency_pin || '--'}</td>
+                        <td class="p-2 border text-emerald-700 font-bold">${c.partner_code || 'مباشر'}</td>
+                        <td class="p-2 border text-center space-x-1 space-x-reverse">
+                            <button onclick="openEditModal('${c.id}')" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] px-2 py-1 rounded transition-colors">
+                                <i class="fa-solid fa-pen"></i> تعديل
+                            </button>
+                            <button onclick="deleteClient('${c.id}', '${c.full_name}')" class="bg-red-600 hover:bg-red-700 text-white text-[10px] px-2 py-1 rounded transition-colors">
+                                <i class="fa-solid fa-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                clientBody.innerHTML = `<tr><td colspan="8" class="p-3 text-center text-slate-400">لا يوجد زبائن مسجلون</td></tr>`;
+            }
+
+            if (partnersRes.data && partnersRes.data.length > 0) {
+                partBody.innerHTML = partnersRes.data.map(part => `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="p-2 border font-semibold">${part.store_name}</td>
+                        <td class="p-2 border">${part.owner_name || '--'}</td>
+                        <td class="p-2 border text-slate-600">${part.business_type || '--'}</td>
+                        <td class="p-2 border">${part.phone}</td>
+                        <td class="p-2 border">${part.state || ''} / ${part.municipality || ''}</td>
+                        <td class="p-2 border text-emerald-700 font-bold">${part.partner_code}</td>
+                        <td class="p-2 border text-center">
+                            <button onclick="deletePartner('${part.id}', '${part.store_name}')" class="bg-red-600 hover:bg-red-700 text-white text-[10px] px-2 py-1 rounded transition-colors">
+                                <i class="fa-solid fa-trash"></i> حذف
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                partBody.innerHTML = `<tr><td colspan="7" class="p-3 text-center text-slate-400">لا توجد محلات مسجلة</td></tr>`;
+            }
+
+            if (incidentsRes.data && incidentsRes.data.length > 0) {
+                incBody.innerHTML = incidentsRes.data.map(inc => `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="p-2 border font-semibold">${inc.client_phone}</td>
+                        <td class="p-2 border text-red-600 font-bold">${inc.emergency_pin}</td>
+                        <td class="p-2 border text-slate-400">${new Date(inc.created_at).toLocaleString('ar-DZ')}</td>
+                    </tr>
+                `).join('');
+            } else {
+                incBody.innerHTML = `<tr><td colspan="3" class="p-3 text-center text-slate-400">لا توجد بلاغات طوارئ مسجلة حالياً</td></tr>`;
+            }
+        }
+
+        function openEditModal(clientId) {
+            const client = clientsListCache.find(c => c.id === clientId);
+            if (!client) return;
+
+            document.getElementById('edit-client-id').value = client.id;
+            document.getElementById('edit-client-name').value = client.full_name || '';
+            document.getElementById('edit-client-email').value = client.email || '';
+            document.getElementById('edit-client-password').value = client.password || '';
+            document.getElementById('edit-client-phone').value = client.phone || '';
+            document.getElementById('edit-client-pin').value = client.emergency_pin || '';
+            document.getElementById('edit-client-state').value = client.state || '';
+            updateMunicipalities('edit-client-state', 'edit-client-municipality');
+            document.getElementById('edit-client-municipality').value = client.municipality || '';
+            document.getElementById('edit-client-device').value = client.device_type || 'Android';
+            document.getElementById('edit-client-partner').value = client.partner_code || '';
+
+            document.getElementById('modal-edit-client').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('modal-edit-client').classList.add('hidden');
+        }
+
+        async function saveClientEdits(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save-edit');
+            const originalText = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري الحفظ...';
+
+            const id = document.getElementById('edit-client-id').value;
+            const name = sanitizeInput(document.getElementById('edit-client-name').value);
+            const email = sanitizeInput(document.getElementById('edit-client-email').value);
+            const password = document.getElementById('edit-client-password').value;
+            const phone = sanitizeInput(document.getElementById('edit-client-phone').value);
+            const pin = document.getElementById('edit-client-pin').value;
+            const state = document.getElementById('edit-client-state').value;
+            const municipality = document.getElementById('edit-client-municipality').value;
+            const device = document.getElementById('edit-client-device').value;
+            const partnerCode = sanitizeInput(document.getElementById('edit-client-partner').value).toUpperCase() || null;
+
+            try {
+                const { error } = await db.from('clients')
+                    .update({
+                        full_name: name,
+                        email: email,
+                        password: password,
+                        phone: phone,
+                        emergency_pin: pin,
+                        state: state,
+                        municipality: municipality,
+                        device_type: device,
+                        partner_code: partnerCode
+                    })
+                    .eq('id', id);
+
+                if (error) {
+                    alert(getFriendlyErrorMessage(error));
+                } else {
+                    alert("تم تعديل بيانات الزبون بنجاح ومزامنتها سحابياً!");
+                    closeEditModal();
+                    loadAdminData();
+                }
+            } catch (err) {
+                alert(getFriendlyErrorMessage(err));
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        async function deleteClient(id, name) {
+            if (confirm(`هل أنت متاكد من رغبتك في حذف الزبون (${name}) نهائياً؟`)) {
+                const { error } = await db.from('clients').delete().eq('id', id);
+                if (error) alert(getFriendlyErrorMessage(error));
+                else loadAdminData();
+            }
+        }
+
+        async function deletePartner(id, storeName) {
+            if (confirm(`هل أنت متاكد من حذف المحل الشريك (${storeName}) نهائياً؟`)) {
+                const { error } = await db.from('partners').delete().eq('id', id);
+                if (error) alert(getFriendlyErrorMessage(error));
+                else loadAdminData();
+            }
         }
     </script>
 </body>
